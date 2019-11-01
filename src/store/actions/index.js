@@ -1,0 +1,1 @@
+export { fetchRequeriments } from "./requeriments";

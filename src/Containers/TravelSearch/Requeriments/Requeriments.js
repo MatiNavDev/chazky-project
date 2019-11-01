@@ -1,23 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import Requeriment from '../../../Components/TravelSearch/Requeriment/Requeriment';
+import Requeriment from "../../../Components/TravelSearch/Requeriment/Requeriment";
+import ErrorComponent from "../../../Components/Common/ErrorComponent";
+import * as actions from "../../../store/actions";
 
 class Requeriments extends Component {
-  state = {
-    requeriments: [
-      {
-        id: 1,
-        description: 'Mascota'
-      },
-      {
-        id: 2,
-        description: 'Acompaniada'
-      }
-    ]
-  };
+  componentDidMount() {
+    this.props.onFetchRequeriments();
+  }
 
   render() {
-    const { requeriments } = this.state;
+    const { requeriments, error, loading } = this.props;
+    if (loading) return <div>Cargando requerimientos ...</div>;
+
+    if (error) return <ErrorComponent />;
+
     return (
       <div>
         {requeriments.map(req => (
@@ -28,4 +26,16 @@ class Requeriments extends Component {
   }
 }
 
-export default Requeriments;
+const mapStateToProps = state => ({
+  requeriments: state.requeriments,
+  loading: state.loading
+});
+
+const mapDispatchToProps = dispatch => ({
+  onFetchRequeriments: () => dispatch(actions.fetchRequeriments())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Requeriments);

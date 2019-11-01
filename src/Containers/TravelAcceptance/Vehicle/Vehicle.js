@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import socketIOClient from 'socket.io-client';
+import React, { Component } from "react";
+import socketIOClient from "socket.io-client";
 
-import SearchingTravel from '../../../Components/TravelAcceptance/SearchingTravel/SearchingTravel';
-import UsersAccepted from '../../../Components/TravelAcceptance/UsersAccepted/UsersAccepted';
-import UsersToAccept from '../../../Components/TravelAcceptance/UsersToAccept/UsersToAccept';
+import SearchingTravel from "../../../Components/TravelAcceptance/SearchingTravel/SearchingTravel";
+import UsersAccepted from "../../../Components/TravelAcceptance/UsersAccepted/UsersAccepted";
+import UsersToAccept from "../../../Components/TravelAcceptance/UsersToAccept/UsersToAccept";
 
 class Vehicle extends Component {
   //TODO: hacer que el endpoint se comparta entre components
   state = {
-    endpoint: 'xxx',
+    endpoint: "xxx",
     usersToAccept: [
       {
         id: 1,
-        travelInfo: 'Viaje mega rapido',
-        userName: 'Pedro'
+        travelInfo: "Viaje mega rapido",
+        userName: "Pedro"
       }
     ],
     usersAccepted: []
@@ -31,20 +31,26 @@ class Vehicle extends Component {
   listenForNewUserToAccept = () => {
     const { socket } = this.state;
 
-    socket.on('newUserToAccept', userToAccept =>
-      this.setState(prevState => ({ usersAccepted: [...prevState.usersAccepted, userToAccept] }))
+    socket.on("newUserToAccept", userToAccept =>
+      this.setState(prevState => ({
+        usersAccepted: [...prevState.usersAccepted, userToAccept]
+      }))
     );
   };
 
   aceptUser = userInfo => {
-    this.setState(prevState => ({ usersAccepted: [...prevState.usersAccepted, userInfo] }));
+    this.setState(prevState => ({
+      usersAccepted: [...prevState.usersAccepted, userInfo]
+    }));
 
     this.rejectUser(userInfo);
   };
 
   rejectUser = userInfo => {
     this.setState(prevState => ({
-      usersToAccept: prevState.usersToAccept.filter(user => user.id !== userInfo.id)
+      usersToAccept: prevState.usersToAccept.filter(
+        user => user.id !== userInfo.id
+      )
     }));
   };
 

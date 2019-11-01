@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import socketIOClient from 'socket.io-client';
-import { withRouter } from 'react-router-dom';
+import React, { Component } from "react";
+import socketIOClient from "socket.io-client";
+import { withRouter } from "react-router-dom";
 
-import SearchingTravel from '../../../Components/TravelAcceptance/SearchingTravel/SearchingTravel';
-import TravelInformation from '../../../Components/TravelAcceptance/TravelInformation/TravelInformation';
+import SearchingTravel from "../../../Components/TravelAcceptance/SearchingTravel/SearchingTravel";
+import TravelInformation from "../../../Components/TravelAcceptance/TravelInformation/TravelInformation";
 
 class User extends Component {
   //TODO: hacer que el endpoint se comparta entre components
   state = {
-    endpoint: 'xxx',
+    endpoint: "xxx",
     travelInfo: {
-      description: 'Vehiculo 1 ha tomado su viaje',
-      time: '12 minutos'
+      description: "Vehiculo 1 ha tomado su viaje",
+      time: "12 minutos"
     }
   };
 
@@ -26,16 +26,16 @@ class User extends Component {
   listenForAcceptance = () => {
     const { socket } = this.state;
 
-    socket.on('travelAccepted', travelInfo => this.setState({ travelInfo }));
+    socket.on("travelAccepted", travelInfo => this.setState({ travelInfo }));
   };
 
   listenForFinalization = () => {
     const { socket } = this.state;
 
-    socket.on('travelFinalized', data => {
+    socket.on("travelFinalized", data => {
       this.setState({ travelInfo: null });
       socket.disconnect();
-      this.props.history('/');
+      this.props.history("/");
     });
   };
 
@@ -43,7 +43,10 @@ class User extends Component {
     const { travelInfo } = this.state;
 
     const componentToShow = travelInfo ? (
-      <TravelInformation description={travelInfo.description} time={travelInfo.time} />
+      <TravelInformation
+        description={travelInfo.description}
+        time={travelInfo.time}
+      />
     ) : (
       <SearchingTravel />
     );
