@@ -14,11 +14,11 @@ class TravelSearch extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <div>
         <TypeSelectors></TypeSelectors>
         <RequerimentsSelector></RequerimentsSelector>
         <button onClick={this.searchTravel}>Search</button>
-      </React.Fragment>
+      </div>
     );
   }
 }

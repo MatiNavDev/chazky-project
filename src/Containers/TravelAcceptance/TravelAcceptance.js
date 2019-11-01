@@ -5,12 +5,11 @@ import Vehicle from './Vehicle/Vehicle';
 
 class TravelAcceptance extends Component {
   state = {
-    type: 'user'
+    type: 'vehicle'
   };
 
   render() {
     const { type } = this.state;
-
     // TODO: cambiar el tipo por usar una variable comun;
     const componentChoosed = type === 'user' ? <User></User> : <Vehicle></Vehicle>;
 

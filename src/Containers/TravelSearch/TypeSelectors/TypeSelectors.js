@@ -1,5 +1,5 @@
 import React from 'react';
-import TypeSelector from '../../../Components/TypeSelector/TypeSelector';
+import TypeSelector from '../../../Components/TravelSearch/TypeSelector/TypeSelector';
 
 class TypeSelectors extends React.Component {
   state = {
@@ -41,10 +41,10 @@ class TypeSelectors extends React.Component {
     const { users, vehicles } = this.state;
 
     return (
-      <React.Fragment>
+      <div>
         <TypeSelector title="User" changed={this.onChooseOption} elements={vehicles}></TypeSelector>
         <TypeSelector title="Vehicle" elements={users}></TypeSelector>
-      </React.Fragment>
+      </div>
     );
   }
 }

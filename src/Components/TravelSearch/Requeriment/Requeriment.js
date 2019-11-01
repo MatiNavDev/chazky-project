@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 const requeriment = props => {
   const { req } = props;
@@ -6,12 +6,12 @@ const requeriment = props => {
   const inputId = 'req-check' + req.id;
 
   return (
-    <Fragment>
+    <div>
       <input type="checkbox" id={inputId} />
       <label htmlFor={inputId}>
         <span class="fa fa-check" /> {req.description}
       </label>
-    </Fragment>
+    </div>
   );
 };
 
