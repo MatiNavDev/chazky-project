@@ -1,0 +1,63 @@
+Problema 
+
+Supongamos que tiene dos gatos y desea determinar de que pisos de un edificio
+de cien pisos puede dejar caer un gato sin que este muera. Usted debe determinar
+el numero miınimo de intentos que necesita para encontrar el piso crıtico en el
+peor de los casos y utilizar la mejor estrategia.
+
+
+Respuesta
+
+Luego de analizar la situacion, segun mi punto de vista la mejor forma es ir utilizando la estrategia de dividir en dos los caminos 
+de manera sucesiva, lo que permite tener la solucion de manera mas objetiva posible.
+Partiendo de esa base la solucion estaria formada por:
+    - Partir del piso max dividido 2 (100/2 = 50)
+    - Tirar el gato y determinar si vive o muere.
+    - Restar entre este piso y el anterior y al modulo dividirlo por 2 -->  (|piso ant - piso actual|) / 2.
+      Sumarselo si vive o restarselo si muere al piso actual.
+    - Criterio de finalizacion: cuando el modulo de la resta entre el nro de piso actual y el nro de piso anterior sea igual a 1.
+      (|piso ant - piso actual|) = 1
+    - Solucion: ultimo piso del cual sobrevivio el gato
+    - Problema adicional que surge con la solucion: que ocurre cuando la division da con coma (12,5 por ej). Solucion Utilizar
+      un criterio de flag. Se arranca por tomar el superior a ese numero y se cambia el flag a 1, y si vuelve a ocurrir se toma
+      el inferior cambiando el flag a 0. (El flag estaria para que el programa pueda detectar que camino optar. Ademas el flag
+      podria toma valores de "superior" e "inferior" para ser mas descriptivo)
+
+
+Ejemplificacion:
+
+Piso Max: 100 ; Solucion: piso 68
+
+100/2 = 50 => tiro gato piso 50 y vive => 50 + [ (|50 - 100|)/2 ] = 75... 50 - 75 distinto de 1 => se sigue
+
+75 => tiro gato piso 75 y muere 
+|75 - 68| distinto de 1 => se sigue => 75 - [ (|75 - 50|)/2 ] = 68 (cabe destacar que se utilizo el criterio del flag). 
+
+68 => tiro gato piso 68 y vive 
+|68 - 71| distinto de 1 => se sigue => 68 + [ (|68 - 75|)/2 ] = 71 (cabe destacar que se utilizo el criterio del flag)
+
+71 => tiro gato piso 71 y muere 
+|68 - 71| distinto de 1 => se sigue => 71 - [ (|71 - 68|)/2 ] = 69 (cabe destacar que se utilizo el criterio del flag)
+
+69 => tiro gato piso 69 y muere 
+|69 - 71| distinto de 1 => se sigue => 69 - [ (|71 - 69|)/2 ] = 70
+
+70 => tiro gato piso 70 y muere => 
+70 - 69 = 1 => se para la busqueda. 
+
+Solucion: 68 (ultimo piso del cual sobrevivio el gato)
+
+
+Optimizacion: En el ejercicio claramente se ve que el paso del piso 70 fue realizado pudiendose ya detectar que el gato iba a 
+morir tambien de ese piso. Para resolver esa optimizacion se podria agregar que si el piso actual difiere en uno del piso solucion parcial
+y en este piso actual si muere el gato => se finaliza la busqueda.
+
+
+Ventajas: Utiliza un criterio uniforme que permite determinar el costo del algoritmo  (procesamiento + cantidad de pasos)
+dejando ciertos casos en lo cual se puede optimizar no realizar un paso.
+
+Desventajas: Tener que seguir realizando el algoritmo por mas que se haya encontrado la solucion (ya que en ese momento es 
+una solucion parcial y no definitiva)
+
+
+
