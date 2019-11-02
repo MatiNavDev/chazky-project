@@ -2,22 +2,30 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import { createStore, compose, applyMiddleware } from "redux";
+import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
 
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-import requerimentsReducer from "./store/reducers/requeriments";
+import requerimentReducer from "./store/reducers/requeriment";
+import userReducer from "./store/reducers/user";
+import vehicleReducer from "./store/reducers/vehicle";
 
 const composeEnhancers =
   process.env.NODE_ENV === "development"
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
 
+const rootReducer = combineReducers({
+  requeriment: requerimentReducer,
+  user: userReducer,
+  vehicle: vehicleReducer
+});
+
 const store = createStore(
-  requerimentsReducer,
+  rootReducer,
   composeEnhancers(applyMiddleware(thunk))
 );
 

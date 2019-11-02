@@ -1,21 +1,24 @@
-import React, { Suspense } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import React, { Suspense } from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
 
-import Layout from './hoc/Layout/Layout';
-import './App.css';
+import Layout from "./hoc/Layout/Layout";
+import LoadingComponent from "./Components/UI/LoadingComponent/LoadingComponent";
+import "./App.css";
 
-const TravelSearch = React.lazy(() => import('./Containers/TravelSearch/TravelSearch'));
-const TravelAcceptance = React.lazy(() => import('./Containers/TravelAcceptance/TravelAcceptance'));
+const TravelSearch = React.lazy(() =>
+  import("./Containers/TravelSearch/TravelSearch")
+);
+const TravelAcceptance = React.lazy(() =>
+  import("./Containers/TravelAcceptance/TravelAcceptance")
+);
 
 function App() {
-  const fallbackElement = <div>Loading ...</div>;
-
   const routes = (
     <Switch>
       <Route
         path="/travelAcceptance"
         render={() => (
-          <Suspense fallback={fallbackElement}>
+          <Suspense fallback={<LoadingComponent />}>
             <TravelAcceptance></TravelAcceptance>
           </Suspense>
         )}
@@ -23,7 +26,7 @@ function App() {
       <Route
         path="/"
         render={() => (
-          <Suspense fallback={fallbackElement}>
+          <Suspense fallback={<LoadingComponent />}>
             <TravelSearch></TravelSearch>
           </Suspense>
         )}

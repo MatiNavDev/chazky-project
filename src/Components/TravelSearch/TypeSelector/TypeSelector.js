@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const typeSelector = props => {
   const { title, elements, changed } = props;
@@ -9,7 +9,7 @@ const typeSelector = props => {
       <select onChange={changed}>
         {elements.map(elem => (
           <option key={elem.id} value={elem.value}>
-            {elem.description}
+            {elem.name}
           </option>
         ))}
       </select>

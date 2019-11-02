@@ -3,9 +3,6 @@ import { updateObject } from "../../shared/utility";
 
 const initialState = {
   requeriments: [],
-  users: [],
-  vehicles: [],
-  type: "",
   loading: true,
   error: ""
 };

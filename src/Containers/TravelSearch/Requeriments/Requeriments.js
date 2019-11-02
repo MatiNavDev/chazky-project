@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import Requeriment from "../../../Components/TravelSearch/Requeriment/Requeriment";
-import ErrorComponent from "../../../Components/Common/ErrorComponent";
 import * as actions from "../../../store/actions";
+import Requeriment from "../../../Components/TravelSearch/Requeriment/Requeriment";
+import ErrorComponent from "../../../Components/UI/ErrorComponent/ErrorComponent";
+import LoadingComponent from "../../../Components/UI/LoadingComponent/LoadingComponent";
 
 class Requeriments extends Component {
   componentDidMount() {
@@ -12,7 +13,7 @@ class Requeriments extends Component {
 
   render() {
     const { requeriments, error, loading } = this.props;
-    if (loading) return <div>Cargando requerimientos ...</div>;
+    if (loading) return <LoadingComponent additionalText="Requerimientos" />;
 
     if (error) return <ErrorComponent />;
 
@@ -27,8 +28,8 @@ class Requeriments extends Component {
 }
 
 const mapStateToProps = state => ({
-  requeriments: state.requeriments,
-  loading: state.loading
+  requeriments: state.requeriment.requeriments,
+  loading: state.requeriment.loading
 });
 
 const mapDispatchToProps = dispatch => ({
