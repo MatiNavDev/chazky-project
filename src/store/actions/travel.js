@@ -1,3 +1,5 @@
+import socketIOClient from "socket.io-client";
+
 import * as actionTypes from "./actionTypes";
 import { axiosUsers, axiosVehicles } from "../../axios-instances";
 
@@ -19,18 +21,28 @@ const searchTravel = (
   shareTravel,
   elemSelectedId,
   push
-) => async dispatch => {
+) => dispatch => {
   try {
     dispatch(saveTravelStart());
     const axiosInstance = type === "user" ? axiosUsers : axiosVehicles;
-    const body = {
-      requerimentsSelecteds,
-      shareTravel,
-      [type]: elemSelectedId
-    };
-    const resp = await axiosInstance.post("/", body);
-    dispatch(saveTravelSuccess(resp.data.data.socketId));
-    push("/travelAcceptance");
+
+    const socket = socketIOClient("http://127.0.0.1:3007");
+    socket.on("connect", async () => {
+      try {
+        const body = {
+          requerimentsSelecteds,
+          shareTravel,
+          [type]: elemSelectedId,
+          socketId: socket.id
+        };
+        const resp = await axiosInstance.post("/asdasda", body);
+        dispatch(saveTravelSuccess(socket.id));
+
+        push("/travelAcceptance");
+      } catch (error) {
+        dispatch(saveTravelError(error));
+      }
+    });
   } catch (error) {
     dispatch(saveTravelError(error));
   }
