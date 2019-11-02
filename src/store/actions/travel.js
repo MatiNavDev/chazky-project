@@ -35,7 +35,7 @@ const searchTravel = (
           [type]: elemSelectedId,
           socketId: socket.id
         };
-        const resp = await axiosInstance.post("/asdasda", body);
+        const resp = await axiosInstance.post("/", body);
         dispatch(saveTravelSuccess(socket.id));
 
         push("/travelAcceptance");
