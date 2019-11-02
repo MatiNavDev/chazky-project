@@ -5,7 +5,9 @@ const initialState = {
   socketId: "",
   type: "",
   requerimentsSelecteds: [],
-  loading: false
+  loading: false,
+  elemSelectedId: "",
+  error: ""
 };
 
 const addRequeriment = (state, action) => {
@@ -32,11 +34,15 @@ const travelReducer = (state = initialState, action) => {
     case actionTypes.SAVE_TRAVEL_SUCCESS:
       return updateObject(state, { loading: false, socketId: action.socketId });
     case actionTypes.SAVE_TRAVEL_FAIL:
-      return updateObject(state, { loading: false, message: action.message });
+      return updateObject(state, { loading: false, error: action.message });
     case actionTypes.ADD_REQUERIMENT:
       return addRequeriment(state, action);
     case actionTypes.REMOVE_REQUERIMENT:
       return removeRequeriment(state, action);
+    case actionTypes.SET_TYPE:
+      return updateObject(state, { type: action.typeSelected });
+    case actionTypes.SET_ELEMENT_SELECTED_ID:
+      return updateObject(state, { elemSelectedId: action.elemId });
 
     default:
       return state;

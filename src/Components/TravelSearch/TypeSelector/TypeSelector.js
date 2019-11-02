@@ -1,14 +1,17 @@
 import React from "react";
 
 const typeSelector = props => {
-  const { title, elements, changed } = props;
+  const { title, elements, changed, type, elemChoosed } = props;
 
   return (
     <label>
       {title}
-      <select onChange={changed}>
+      <select
+        defaultValue={elemChoosed}
+        onChange={event => changed(event, type)}
+      >
         {elements.map(elem => (
-          <option key={elem._id} value={elem.value}>
+          <option key={elem._id} value={elem._id}>
             {elem.name}
           </option>
         ))}

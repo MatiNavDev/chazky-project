@@ -17,7 +17,7 @@ const searchTravel = (
   requerimentsSelecteds,
   type,
   shareTravel,
-  element,
+  elemSelectedId,
   push
 ) => async dispatch => {
   try {
@@ -26,9 +26,8 @@ const searchTravel = (
     const body = {
       requerimentsSelecteds,
       shareTravel,
-      [type]: element
+      [type]: elemSelectedId
     };
-
     const resp = await axiosInstance.post("/", body);
     dispatch(saveTravelSuccess(resp.data.data.socketId));
     push("/travelAcceptance");
@@ -49,4 +48,16 @@ const addRequerimentSelected = requerimentId => dispatch =>
 const removeRequerimentSelected = requerimentId => dispatch =>
   dispatch({ type: actionTypes.REMOVE_REQUERIMENT, requerimentId });
 
-export { searchTravel, addRequerimentSelected, removeRequerimentSelected };
+const setType = typeSelected => dispatch =>
+  dispatch({ type: actionTypes.SET_TYPE, typeSelected });
+
+const setElementSelectedId = elemId => dispatch =>
+  dispatch({ type: actionTypes.SET_ELEMENT_SELECTED_ID, elemId });
+
+export {
+  searchTravel,
+  addRequerimentSelected,
+  removeRequerimentSelected,
+  setType,
+  setElementSelectedId
+};

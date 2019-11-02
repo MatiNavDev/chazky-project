@@ -4,5 +4,7 @@ export { fetchUsers } from "./users";
 export {
   searchTravel,
   addRequerimentSelected,
-  removeRequerimentSelected
+  removeRequerimentSelected,
+  setType,
+  setElementSelectedId
 } from "./travel";

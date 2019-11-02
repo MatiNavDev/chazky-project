@@ -1,7 +1,7 @@
 import React from "react";
 
 const loadingComponent = props => {
-  let { additionalText } = props;
+  let { additionalText = "" } = props;
 
   additionalText = additionalText ? (additionalText += " ") : additionalText;
 
