@@ -12,7 +12,13 @@ class Requeriments extends Component {
   }
 
   render() {
-    const { requeriments, error, loading } = this.props;
+    const {
+      requeriments,
+      error,
+      loading,
+      onAddRequerimentSelected,
+      onRemoveRequerimentSelected
+    } = this.props;
     if (loading) return <LoadingComponent additionalText="Requerimientos" />;
 
     if (error) return <ErrorComponent />;
@@ -20,7 +26,12 @@ class Requeriments extends Component {
     return (
       <div>
         {requeriments.map(req => (
-          <Requeriment req={req}></Requeriment>
+          <Requeriment
+            key={req._id}
+            add={onAddRequerimentSelected}
+            remove={onRemoveRequerimentSelected}
+            req={req}
+          ></Requeriment>
         ))}
       </div>
     );
@@ -33,7 +44,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onFetchRequeriments: () => dispatch(actions.fetchRequeriments())
+  onFetchRequeriments: () => dispatch(actions.fetchRequeriments()),
+  onRemoveRequerimentSelected: reqId =>
+    dispatch(actions.removeRequerimentSelected(reqId)),
+  onAddRequerimentSelected: reqId =>
+    dispatch(actions.addRequerimentSelected(reqId))
 });
 
 export default connect(

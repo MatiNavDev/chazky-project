@@ -8,7 +8,7 @@ const typeSelector = props => {
       {title}
       <select onChange={changed}>
         {elements.map(elem => (
-          <option key={elem.id} value={elem.value}>
+          <option key={elem._id} value={elem.value}>
             {elem.name}
           </option>
         ))}

@@ -12,6 +12,7 @@ import * as serviceWorker from "./serviceWorker";
 import requerimentReducer from "./store/reducers/requeriment";
 import userReducer from "./store/reducers/user";
 import vehicleReducer from "./store/reducers/vehicle";
+import travelReducer from "./store/reducers/travel";
 
 const composeEnhancers =
   process.env.NODE_ENV === "development"
@@ -21,7 +22,8 @@ const composeEnhancers =
 const rootReducer = combineReducers({
   requeriment: requerimentReducer,
   user: userReducer,
-  vehicle: vehicleReducer
+  vehicle: vehicleReducer,
+  travel: travelReducer
 });
 
 const store = createStore(
