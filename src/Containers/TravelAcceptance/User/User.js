@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 
 import SearchingTravel from "../../../Components/TravelAcceptance/SearchingTravel/SearchingTravel";
 import TravelInformation from "../../../Components/TravelAcceptance/TravelInformation/TravelInformation";
+import * as constants from "../../../shared/constants";
 
 class User extends Component {
   //TODO: hacer que el endpoint se comparta entre components
@@ -23,20 +24,27 @@ class User extends Component {
     this.listenForFinalization();
   }
 
-  listenForAcceptance = () => {
-    const { socket } = this.state;
+  componentWillUnmount() {
+    const { elemSelectedId, sendVehicleNotUsed } = this.props;
 
-    socket.on("travelAccepted", travelInfo => this.setState({ travelInfo }));
-  };
+    sendVehicleNotUsed(elemSelectedId);
+  }
 
   listenForFinalization = () => {
-    const { socket } = this.state;
+    const { socket, history } = this.props;
 
-    socket.on("travelFinalized", data => {
-      this.setState({ travelInfo: null });
+    socket.on(constants.SOCKET_USER_DISCONNECT, () => {
       socket.disconnect();
-      this.props.history("/");
+      history.push("/");
     });
+  };
+
+  listenForAcceptance = () => {
+    const { socket } = this.props;
+
+    socket.on(constants.SOCKET_USER_LISTENING_FOR_TRAVEL, () =>
+      console.log("yeahh")
+    );
   };
 
   render() {

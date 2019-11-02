@@ -3,6 +3,7 @@ import { updateObject } from "../../shared/utility";
 
 const initialState = {
   vehicles: [],
+  usersToAccept: [],
   loading: true,
   error: ""
 };
@@ -23,6 +24,14 @@ const fetchVehicleSuccess = (state, action) =>
 const fetchVehicleFail = (state, action) =>
   updateObject(state, { error: action.error.message, loading: false });
 
+/**
+ * Aniade un usuario a la lista de usuarios para aceptar
+ * @param {*} state
+ * @param {*} action
+ */
+const addUserToUsersToAccept = (state, action) =>
+  updateObject(state, { usersToAccept: [...state.usersToAccept, action.user] });
+
 const vehicleReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_VEHICLES_STARTS:
@@ -31,6 +40,8 @@ const vehicleReducer = (state = initialState, action) => {
       return fetchVehicleSuccess(state, action);
     case actionTypes.FETCH_VEHICLES_FAIL:
       return fetchVehicleFail(state, action);
+    case actionTypes.ADD_USER_TO_ACCEPT:
+      return addUserToUsersToAccept(state, action);
     default:
       return state;
   }

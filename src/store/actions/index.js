@@ -1,5 +1,5 @@
 export { fetchRequeriments } from "./requeriments";
-export { fetchVehicles } from "./vehicles";
+export { fetchVehicles, addUserToAccept, sendVehicleNotUsed } from "./vehicles";
 export { fetchUsers } from "./users";
 export {
   searchTravel,

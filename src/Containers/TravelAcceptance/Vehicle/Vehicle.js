@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import socketIOClient from "socket.io-client";
+import { connect } from "react-redux";
 
 import SearchingTravel from "../../../Components/TravelAcceptance/SearchingTravel/SearchingTravel";
 import UsersAccepted from "../../../Components/TravelAcceptance/UsersAccepted/UsersAccepted";
 import UsersToAccept from "../../../Components/TravelAcceptance/UsersToAccept/UsersToAccept";
+import * as constants from "../../../shared/constants";
+import * as actions from "../../../store/actions";
 
 class Vehicle extends Component {
   //TODO: hacer que el endpoint se comparta entre components
@@ -20,12 +22,17 @@ class Vehicle extends Component {
   };
 
   componentDidMount() {
-    const { endpoint } = this.state;
-    this.setState({ socket: socketIOClient(endpoint) });
+    const { socket, onAddUserToAccept } = this.props;
+
+    socket.on(constants.SOCKET_VEHICLE_LISTENING_FOR_TRAVEL, user => {
+      onAddUserToAccept(user);
+    });
   }
 
   componentWillUnmount() {
-    //TODO: enviar al server que este vehiculo ya no esta disponible
+    const { elemSelectedId, sendVehicleNotUsed } = this.props;
+
+    sendVehicleNotUsed(elemSelectedId);
   }
 
   listenForNewUserToAccept = () => {
@@ -75,4 +82,17 @@ class Vehicle extends Component {
   }
 }
 
-export default Vehicle;
+const mapStateToProps = state => ({
+  socket: state.travel.socket
+});
+
+const mapDispatchToProps = dispatch => ({
+  onAddUserToAccept: user => dispatch(actions.addUserToAccept(user)),
+  onVehicleDisconnect: vehicleId =>
+    dispatch(actions.sendVehicleNotUsed(vehicleId))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Vehicle);
