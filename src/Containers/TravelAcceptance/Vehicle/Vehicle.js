@@ -5,44 +5,22 @@ import SearchingTravel from "../../../Components/TravelAcceptance/SearchingTrave
 import UsersAccepted from "../../../Components/TravelAcceptance/UsersAccepted/UsersAccepted";
 import UsersToAccept from "../../../Components/TravelAcceptance/UsersToAccept/UsersToAccept";
 import * as constants from "../../../shared/constants";
-import * as actions from "../../../store/actions";
 
 class Vehicle extends Component {
-  //TODO: hacer que el endpoint se comparta entre components
-  state = {
-    endpoint: "xxx",
-    usersToAccept: [
-      {
-        id: 1,
-        travelInfo: "Viaje mega rapido",
-        userName: "Pedro"
-      }
-    ],
-    usersAccepted: []
-  };
-
   componentDidMount() {
+    const { socket } = this.props;
+
+    if (socket) {
+      this.listenForNewUserToAccept();
+    }
+  }
+
+  listenForNewUserToAccept = () => {
     const { socket, onAddUserToAccept } = this.props;
 
     socket.on(constants.SOCKET_VEHICLE_LISTENING_FOR_TRAVEL, user => {
       onAddUserToAccept(user);
     });
-  }
-
-  componentWillUnmount() {
-    const { elemSelectedId, sendVehicleNotUsed } = this.props;
-
-    sendVehicleNotUsed(elemSelectedId);
-  }
-
-  listenForNewUserToAccept = () => {
-    const { socket } = this.state;
-
-    socket.on("newUserToAccept", userToAccept =>
-      this.setState(prevState => ({
-        usersAccepted: [...prevState.usersAccepted, userToAccept]
-      }))
-    );
   };
 
   aceptUser = userInfo => {
@@ -62,7 +40,7 @@ class Vehicle extends Component {
   };
 
   render() {
-    const { usersToAccept, usersAccepted } = this.state;
+    const { usersToAccept, usersAccepted } = this.props;
 
     const hasUsers = usersToAccept.length > 0 || usersAccepted.length > 0;
 
@@ -83,14 +61,12 @@ class Vehicle extends Component {
 }
 
 const mapStateToProps = state => ({
-  socket: state.travel.socket
+  socket: state.travel.socket,
+  usersToAccept: state.travel.usersToAccept,
+  usersAccepted: state.travel.usersAccepted
 });
 
-const mapDispatchToProps = dispatch => ({
-  onAddUserToAccept: user => dispatch(actions.addUserToAccept(user)),
-  onVehicleDisconnect: vehicleId =>
-    dispatch(actions.sendVehicleNotUsed(vehicleId))
-});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(
   mapStateToProps,

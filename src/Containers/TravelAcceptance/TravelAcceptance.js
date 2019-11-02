@@ -3,12 +3,19 @@ import { connect } from "react-redux";
 
 import User from "./User/User";
 import Vehicle from "./Vehicle/Vehicle";
+import * as actions from "../../store/actions";
 
 class TravelAcceptance extends Component {
   componentWillUnmount() {
-    const { socket } = this.props;
+    const {
+      socket,
+      type,
+      elemSelectedId,
+      onSendElementNotUsedAnymore
+    } = this.props;
 
     socket.disconnect();
+    onSendElementNotUsedAnymore(elemSelectedId, type);
   }
 
   render() {
@@ -23,7 +30,16 @@ class TravelAcceptance extends Component {
 
 const mapStateToProps = state => ({
   socket: state.travel.socket,
-  type: state.travel.type
+  type: state.travel.type,
+  elemSelectedId: state.travel.elemSelectedId
 });
 
-export default connect(mapStateToProps)(TravelAcceptance);
+const mapDispatchToProps = dispatch => ({
+  onSendElementNotUsedAnymore: (elem, type) =>
+    dispatch(actions.sendElementNotUsedAnymore(elem, type))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TravelAcceptance);

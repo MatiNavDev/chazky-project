@@ -5,6 +5,8 @@ const initialState = {
   socket: null,
   type: "",
   requerimentsSelecteds: [],
+  usersToAccept: [],
+  usersAccepted: [],
   loading: false,
   elemSelectedId: "",
   error: ""
@@ -32,7 +34,7 @@ const travelReducer = (state = initialState, action) => {
     case actionTypes.SAVE_TRAVEL_STARTS:
       return updateObject(state, { loading: true });
     case actionTypes.SAVE_TRAVEL_SUCCESS:
-      return updateObject(state, { loading: false, socketId: action.socketId });
+      return updateObject(state, { loading: false, socket: action.socket });
     case actionTypes.SAVE_TRAVEL_FAIL:
       return updateObject(state, { loading: false, error: action.message });
     case actionTypes.ADD_REQUERIMENT:
@@ -43,7 +45,10 @@ const travelReducer = (state = initialState, action) => {
       return updateObject(state, { type: action.typeSelected });
     case actionTypes.SET_ELEMENT_SELECTED_ID:
       return updateObject(state, { elemSelectedId: action.elemId });
-
+    case actionTypes.ELEMENT_NOT_USED_ANYMORE:
+      return updateObject(state, initialState);
+    case actionTypes.ADD_USER_TO_ACCEPT:
+      return updateObject(state, { usersToAccept: action.usersToAccept });
     default:
       return state;
   }

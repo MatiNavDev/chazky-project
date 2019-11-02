@@ -4,7 +4,8 @@ import { updateObject } from "../../shared/utility";
 const initialState = {
   users: [],
   loading: true,
-  error: ""
+  error: "",
+  travelInfo: ""
 };
 
 /**

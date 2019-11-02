@@ -1,6 +1,7 @@
 import socketIOClient from "socket.io-client";
 
 import * as actionTypes from "./actionTypes";
+import * as constants from "../../shared/constants";
 import { axiosUsers, axiosVehicles } from "../../axios-instances";
 
 /**
@@ -29,18 +30,26 @@ const setType = typeSelected => dispatch =>
 const setElementSelectedId = elemId => dispatch =>
   dispatch({ type: actionTypes.SET_ELEMENT_SELECTED_ID, elemId });
 
+const elementNotUsedAnymore = () => ({
+  type: actionTypes.ELEMENT_NOT_USED_ANYMORE
+});
+
 // SET TRAVEL
 
 const saveTravelStart = () => ({
   type: actionTypes.SAVE_TRAVEL_STARTS
 });
-const saveTravelSuccess = socketId => ({
+const saveTravelSuccess = socket => ({
   type: actionTypes.SAVE_TRAVEL_SUCCESS,
-  socketId
+  socket
 });
 const saveTravelError = message => ({
   type: actionTypes.SAVE_TRAVEL_FAIL,
   message
+});
+const saveUserToAccept = usersToAccept => ({
+  type: actionTypes.ADD_USER_TO_ACCEPT,
+  usersToAccept
 });
 
 /**
@@ -60,7 +69,7 @@ const searchTravel = (
 ) => dispatch => {
   try {
     dispatch(saveTravelStart());
-    const axiosInstance = type === "user" ? axiosUsers : axiosVehicles;
+    const axiosInstance = type === constants.USER ? axiosUsers : axiosVehicles;
 
     const socket = socketIOClient("http://127.0.0.1:3007");
     socket.on("connect", async () => {
@@ -71,8 +80,10 @@ const searchTravel = (
           [type]: elemSelectedId,
           socketId: socket.id
         };
-        await axiosInstance.post("/", body);
+        const resp = await axiosInstance.post("/", body);
         dispatch(saveTravelSuccess(socket));
+        if (type === constants.VEHICLE)
+          dispatch(saveUserToAccept(resp.data.data.usersToAccept));
 
         push("/travelAcceptance");
       } catch (error) {
@@ -84,10 +95,29 @@ const searchTravel = (
   }
 };
 
+/**
+ * Envia al server que el elemento elegido no se utiliza mas y se puede liberar
+ * @param {string} elementId
+ * @param {string} type
+ */
+const sendElementNotUsedAnymore = (elementId, type) => dispatch => {
+  try {
+    const axiosInstance = type === "user" ? axiosUsers : axiosVehicles;
+    axiosInstance.post("/notUsedAnymore", { id: elementId });
+    dispatch(elementNotUsedAnymore());
+  } catch (error) {
+    //TODO IDEAL: como se ejecuta con el componentWillUnmount lo ideal seria que en el caso
+    // de error se planifique una estrategia para ver como volver a enviar este evento al servidor para
+    // que quede actualizado. Por fines de simplificacion solo se ejecuta actualmente un console.log
+    console.log(error);
+  }
+};
+
 export {
   searchTravel,
   addRequerimentSelected,
   removeRequerimentSelected,
   setType,
-  setElementSelectedId
+  setElementSelectedId,
+  sendElementNotUsedAnymore
 };

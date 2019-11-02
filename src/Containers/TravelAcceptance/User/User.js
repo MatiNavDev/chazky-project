@@ -1,33 +1,19 @@
 import React, { Component } from "react";
-import socketIOClient from "socket.io-client";
 import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
 import SearchingTravel from "../../../Components/TravelAcceptance/SearchingTravel/SearchingTravel";
 import TravelInformation from "../../../Components/TravelAcceptance/TravelInformation/TravelInformation";
 import * as constants from "../../../shared/constants";
 
 class User extends Component {
-  //TODO: hacer que el endpoint se comparta entre components
-  state = {
-    endpoint: "xxx",
-    travelInfo: {
-      description: "Vehiculo 1 ha tomado su viaje",
-      time: "12 minutos"
-    }
-  };
-
   componentDidMount() {
-    const { endpoint } = this.state;
-    this.setState({ socket: socketIOClient(endpoint) });
+    const { socket } = this.props;
 
-    this.listenForAcceptance();
-    this.listenForFinalization();
-  }
-
-  componentWillUnmount() {
-    const { elemSelectedId, sendVehicleNotUsed } = this.props;
-
-    sendVehicleNotUsed(elemSelectedId);
+    if (socket) {
+      this.listenForAcceptance();
+      this.listenForFinalization();
+    }
   }
 
   listenForFinalization = () => {
@@ -48,7 +34,7 @@ class User extends Component {
   };
 
   render() {
-    const { travelInfo } = this.state;
+    const { travelInfo } = this.props;
 
     const componentToShow = travelInfo ? (
       <TravelInformation
@@ -62,4 +48,9 @@ class User extends Component {
   }
 }
 
-export default withRouter(User);
+const mapStateToProps = state => ({
+  socket: state.travel.socket,
+  travelInfo: state.travel.travelInfo
+});
+
+export default withRouter(connect(mapStateToProps)(User));
