@@ -13,6 +13,7 @@ class Vehicle extends Component {
 
     if (socket) {
       this.listenForNewUserToAccept();
+      this.listenForUserCancelledTravel();
     }
   }
 
@@ -24,22 +25,29 @@ class Vehicle extends Component {
     });
   };
 
+  listenForUserCancelledTravel = () => {
+    const { socket, onRemoveUserAccepted, onRemoveUserToAccept } = this.props;
+
+    socket.on(constants.SOCKET_VEHICLE_REMOVE_TRAVELLING_USER, userId => {
+      onRemoveUserAccepted(userId);
+      onRemoveUserToAccept(userId);
+    });
+  };
+
   acceptUser = user => {
     const { onAddAcceptedUser, elemSelectedId } = this.props;
 
     onAddAcceptedUser(user, elemSelectedId);
   };
 
-  rejectUser = userInfo => {
-    this.setState(prevState => ({
-      usersToAccept: prevState.usersToAccept.filter(
-        user => user.id !== userInfo.id
-      )
-    }));
+  rejectUser = user => {
+    const { onRejectUserToAccept, elemSelectedId } = this.props;
+
+    onRejectUserToAccept(user, elemSelectedId);
   };
 
   render() {
-    const { usersToAccept, usersAccepted } = this.props;
+    const { usersToAccept, usersAccepted, endTravel } = this.props;
 
     const hasUsersToAccept = usersToAccept.length > 0;
     const hasUsersAccepted = usersAccepted.length > 0;
@@ -61,6 +69,7 @@ class Vehicle extends Component {
         <div>
           {usersToAcceptComponent}
           {usersAcceptedComponent}
+          <button onClick={endTravel}>Finalizar Viajes</button>
         </div>
       ) : (
         <SearchingTravel />
@@ -80,7 +89,11 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onAddUserToAccept: user => dispatch(actions.addUserToAccept(user)),
   onAddAcceptedUser: (user, vehicleId) =>
-    dispatch(actions.addAcceptedUser(user, vehicleId))
+    dispatch(actions.addAcceptedUser(user, vehicleId)),
+  onRejectUserToAccept: (user, vehicleId) =>
+    dispatch(actions.rejectUserToAccept(user, vehicleId)),
+  onRemoveUserAccepted: userId => dispatch(actions.removeUserAccepted(userId)),
+  onRemoveUserToAccept: userId => dispatch(actions.removeUserToAccept(userId))
 });
 
 export default connect(

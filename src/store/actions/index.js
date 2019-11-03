@@ -10,5 +10,8 @@ export {
   sendElementNotUsedAnymore,
   addUserToAccept,
   addAcceptedUser,
-  setAllNotUsed
+  rejectUserToAccept,
+  setAllNotUsed,
+  removeUserAccepted,
+  removeUserToAccept
 } from "./travel";

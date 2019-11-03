@@ -11,7 +11,22 @@ class TypeSelectors extends Component {
   componentDidMount() {
     this.props.onFetchUsers();
     this.props.onFetchVehicles();
+
+    this.listenForRefresh();
   }
+
+  listenForRefresh = () => {
+    const { socket } = this.props;
+
+    if (socket) {
+      socket.on(constants.SOCKET_REFRESH_USERS, userId => {
+        this.props.onFetchUsers();
+      });
+      socket.on(constants.SOCKET_REFRESH_VEHICLES, () =>
+        this.props.onFetchVehicles()
+      );
+    }
+  };
 
   onChooseOption = (event, type) => {
     const { onSetType, onSetElementSelected } = this.props;
@@ -83,7 +98,8 @@ const mapStateToProps = state => ({
   error: state.vehicle.error || state.user.error,
   users: state.user.users,
   type: state.travel.type,
-  elemSelectedId: state.travel.elemSelectedId
+  elemSelectedId: state.travel.elemSelectedId,
+  socket: state.travel.socket
 });
 
 const mapDispatchToProps = dispatch => ({

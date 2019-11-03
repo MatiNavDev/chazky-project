@@ -61,6 +61,11 @@ const addUserAccepted = userAccepted => ({
   userAccepted
 });
 
+const removeUserAccepted = userAcceptedId => ({
+  type: actionTypes.REMOVE_USER_ACCEPTED,
+  userAcceptedId
+});
+
 /**
  * Envia la busqueda al servidor + inicia conexion con el socket
  * @param {*} requerimentsSelecteds
@@ -109,11 +114,16 @@ const searchTravel = (
  * @param {string} elementId
  * @param {string} type
  */
-const sendElementNotUsedAnymore = (elementId, type) => dispatch => {
+const sendElementNotUsedAnymore = (
+  elementId,
+  type,
+  socket
+) => async dispatch => {
   try {
     const axiosInstance = type === "user" ? axiosUsers : axiosVehicles;
-    axiosInstance.post("/notUsedAnymore", { id: elementId });
+    await axiosInstance.post("/notUsedAnymore", { id: elementId });
     dispatch(elementNotUsedAnymore());
+    socket.disconnect();
   } catch (error) {
     //TODO IDEAL: como se ejecuta con el componentWillUnmount lo ideal seria que en el caso
     // de error se planifique una estrategia para ver como volver a enviar este evento al servidor para
@@ -134,6 +144,22 @@ const addAcceptedUser = (user, vehicleId) => async dispatch => {
       userSocketId: user.socketId
     });
     dispatch(addUserAccepted(user));
+    dispatch(removeUserToAccept(user._id));
+  } catch (error) {
+    //TODO: ideal manejar error, el cual indicaria error del sistema (bug). Para simplificat se hace un console.log
+    console.log(error);
+  }
+};
+
+/**
+ * Envia al servidor que el vehiculo rechazo a usuario.
+ * Actualiza lista de usuarios a aceptar
+ * @param {*} user
+ * @param {string} vehicleId
+ */
+const rejectUserToAccept = (user, vehicleId) => async dispatch => {
+  try {
+    await axiosVehicles.post("/rejectUser", { userId: user._id, vehicleId });
     dispatch(removeUserToAccept(user._id));
   } catch (error) {
     //TODO: ideal manejar error, el cual indicaria error del sistema (bug). Para simplificat se hace un console.log
@@ -163,5 +189,8 @@ export {
   sendElementNotUsedAnymore,
   saveUserToAccept as addUserToAccept,
   addAcceptedUser,
+  rejectUserToAccept,
+  removeUserAccepted,
+  removeUserToAccept,
   setAllNotUsed
 };

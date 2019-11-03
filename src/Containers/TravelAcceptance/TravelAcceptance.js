@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import User from "./User/User";
 import Vehicle from "./Vehicle/Vehicle";
@@ -15,16 +16,24 @@ class TravelAcceptance extends Component {
     } = this.props;
 
     if (socket) {
-      socket.disconnect();
-      onSendElementNotUsedAnymore(elemSelectedId, type);
+      onSendElementNotUsedAnymore(elemSelectedId, type, socket);
     }
   }
+
+  endTravel = () => {
+    const { history } = this.props;
+    history.push("/");
+  };
 
   render() {
     const { type } = this.props;
     // TODO: cambiar el tipo por usar una variable comun;
     const componentChoosed =
-      type === "user" ? <User></User> : <Vehicle></Vehicle>;
+      type === "user" ? (
+        <User endTravel={this.endTravel}></User>
+      ) : (
+        <Vehicle endTravel={this.endTravel}></Vehicle>
+      );
 
     return componentChoosed;
   }
@@ -37,11 +46,13 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSendElementNotUsedAnymore: (elem, type) =>
-    dispatch(actions.sendElementNotUsedAnymore(elem, type))
+  onSendElementNotUsedAnymore: (elem, type, socket) =>
+    dispatch(actions.sendElementNotUsedAnymore(elem, type, socket))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TravelAcceptance);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(TravelAcceptance)
+);

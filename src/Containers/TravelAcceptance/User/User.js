@@ -37,9 +37,13 @@ class User extends Component {
 
   render() {
     const { travelInfo } = this.state;
+    const { endTravel } = this.props;
 
     const componentToShow = travelInfo ? (
-      <TravelInformation travelInfo={travelInfo} />
+      <div>
+        <TravelInformation travelInfo={travelInfo} />
+        <button onClick={endTravel}>Finalizar Viaje</button>
+      </div>
     ) : (
       <SearchingTravel />
     );
