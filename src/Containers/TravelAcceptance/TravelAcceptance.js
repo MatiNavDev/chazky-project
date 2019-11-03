@@ -5,8 +5,13 @@ import { withRouter } from "react-router-dom";
 import User from "./User/User";
 import Vehicle from "./Vehicle/Vehicle";
 import * as actions from "../../store/actions";
+import * as constants from "../../shared/constants";
 
 class TravelAcceptance extends Component {
+  componentDidMount() {
+    this.listenForDisconnect();
+  }
+
   componentWillUnmount() {
     const {
       socket,
@@ -20,6 +25,21 @@ class TravelAcceptance extends Component {
     }
   }
 
+  listenForDisconnect = () => {
+    const { socket } = this.props;
+
+    socket.on(constants.SOCKET_DISCONNECT, () => {
+      this.finishConnection();
+    });
+  };
+
+  finishConnection = () => {
+    const { socket, history } = this.props;
+
+    history.push("/");
+    socket.disconnect();
+  };
+
   endTravel = () => {
     const { history } = this.props;
     history.push("/");
@@ -30,7 +50,10 @@ class TravelAcceptance extends Component {
     // TODO: cambiar el tipo por usar una variable comun;
     const componentChoosed =
       type === "user" ? (
-        <User endTravel={this.endTravel}></User>
+        <User
+          endTravel={this.endTravel}
+          finishConnection={this.finishConnection}
+        ></User>
       ) : (
         <Vehicle endTravel={this.endTravel}></Vehicle>
       );

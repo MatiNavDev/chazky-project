@@ -66,6 +66,17 @@ const removeUserAccepted = userAcceptedId => ({
   userAcceptedId
 });
 
+const socketInit = () => dispatch => {
+  const socket = socketIOClient("http://127.0.0.1:3007");
+
+  socket.on("connect", () => console.log("client connected"));
+
+  dispatch({
+    type: actionTypes.INIT_SOCKET,
+    socket
+  });
+};
+
 /**
  * Envia la busqueda al servidor + inicia conexion con el socket
  * @param {*} requerimentsSelecteds
@@ -79,31 +90,29 @@ const searchTravel = (
   type,
   shareTravel,
   elemSelectedId,
-  push
-) => dispatch => {
+  push,
+  socket
+) => async dispatch => {
   try {
     dispatch(saveTravelStart());
     const axiosInstance = type === constants.USER ? axiosUsers : axiosVehicles;
 
-    const socket = socketIOClient("http://127.0.0.1:3007");
-    socket.on("connect", async () => {
-      try {
-        const body = {
-          requerimentsSelecteds,
-          shareTravel,
-          [type]: elemSelectedId,
-          socketId: socket.id
-        };
-        const resp = await axiosInstance.post("/", body);
-        dispatch(saveTravelSuccess(socket));
-        if (type === constants.VEHICLE)
-          dispatch(saveUserToAccept(resp.data.data.usersToAccept));
+    try {
+      const body = {
+        requerimentsSelecteds,
+        shareTravel,
+        [type]: elemSelectedId,
+        socketId: socket.id
+      };
+      const resp = await axiosInstance.post("/", body);
+      dispatch(saveTravelSuccess(socket));
+      if (type === constants.VEHICLE)
+        dispatch(saveUserToAccept(resp.data.data.usersToAccept));
 
-        push("/travelAcceptance");
-      } catch (error) {
-        dispatch(saveTravelError(error));
-      }
-    });
+      push("/travelAcceptance");
+    } catch (error) {
+      dispatch(saveTravelError(error));
+    }
   } catch (error) {
     dispatch(saveTravelError(error));
   }
@@ -138,13 +147,21 @@ const sendElementNotUsedAnymore = (
  */
 const addAcceptedUser = (user, vehicleId) => async dispatch => {
   try {
-    await axiosVehicles.post("/acceptUser", {
+    const resp = await axiosVehicles.post("/acceptUser", {
       vehicleId,
       userId: user._id,
       userSocketId: user.socketId
     });
+
     dispatch(addUserAccepted(user));
-    dispatch(removeUserToAccept(user._id));
+
+    if (resp.data.data.shareVehicle) {
+      //si puede compartir vehiculo remueve solo el usuario
+      dispatch(removeUserToAccept(user._id));
+    } else {
+      //si no puede compartir vehiculo remueve todos los usuarios
+      dispatch(saveUserToAccept([]));
+    }
   } catch (error) {
     //TODO: ideal manejar error, el cual indicaria error del sistema (bug). Para simplificat se hace un console.log
     console.log(error);
@@ -192,5 +209,6 @@ export {
   rejectUserToAccept,
   removeUserAccepted,
   removeUserToAccept,
-  setAllNotUsed
+  setAllNotUsed,
+  socketInit
 };

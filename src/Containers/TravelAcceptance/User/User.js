@@ -19,11 +19,10 @@ class User extends Component {
   }
 
   listenForFinalization = () => {
-    const { socket, history } = this.props;
+    const { socket, finishConnection } = this.props;
 
     socket.on(constants.SOCKET_USER_DISCONNECT, () => {
-      socket.disconnect();
-      history.push("/");
+      finishConnection();
     });
   };
 

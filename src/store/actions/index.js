@@ -13,5 +13,6 @@ export {
   rejectUserToAccept,
   setAllNotUsed,
   removeUserAccepted,
-  removeUserToAccept
+  removeUserToAccept,
+  socketInit
 } from "./travel";

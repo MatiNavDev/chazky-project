@@ -57,6 +57,8 @@ const removeUserAccepted = (state, action) =>
 
 const travelReducer = (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.INIT_SOCKET:
+      return updateObject(state, { socket: action.socket });
     case actionTypes.SAVE_TRAVEL_STARTS:
       return updateObject(state, { loading: true });
     case actionTypes.SAVE_TRAVEL_SUCCESS:

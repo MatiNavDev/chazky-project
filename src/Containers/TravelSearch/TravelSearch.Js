@@ -7,6 +7,7 @@ import RequerimentsSelector from "./Requeriments/Requeriments";
 import LoadingComponent from "../../Components/UI/LoadingComponent/LoadingComponent";
 import ErrorComponent from "../../Components/UI/ErrorComponent/ErrorComponent";
 import * as actions from "../../store/actions";
+import * as constants from "../../shared/constants";
 
 class TravelSearch extends Component {
   state = {
@@ -24,7 +25,8 @@ class TravelSearch extends Component {
       requerimentsSelecteds,
       onSearchTravel,
       elemSelectedId,
-      type
+      type,
+      socket
     } = this.props;
 
     onSearchTravel(
@@ -32,7 +34,8 @@ class TravelSearch extends Component {
       type,
       shareTravel,
       elemSelectedId,
-      history.push
+      history.push,
+      socket
     );
   };
 
@@ -44,25 +47,39 @@ class TravelSearch extends Component {
 
     const inputId = "shareVehicle";
 
+    let requerimentsSelectorComponent = null,
+      shareTravelElem = null;
+
+    if (type === constants.USER) {
+      requerimentsSelectorComponent = <RequerimentsSelector />;
+
+      shareTravelElem = (
+        <div>
+          <input
+            defaultChecked={shareTravel}
+            onChange={this.onChangeSearchTravel}
+            type="checkbox"
+            id={inputId}
+          />
+          <label htmlFor={inputId}>
+            <span className="fa fa-check" /> Deseas Compartir Viaje ?
+          </label>
+        </div>
+      );
+    }
+
     return (
       <div>
         <div>
-          <TypeSelectors></TypeSelectors>
-          <RequerimentsSelector></RequerimentsSelector>
+          <TypeSelectors />
+          {requerimentsSelectorComponent}
+          {shareTravelElem}
+
           <div>
-            <input
-              defaultChecked={shareTravel}
-              onChange={this.onChangeSearchTravel}
-              type="checkbox"
-              id={inputId}
-            />
-            <label htmlFor={inputId}>
-              <span className="fa fa-check" /> Deseas Compartir Viaje ?
-            </label>
+            <button disabled={type ? false : true} onClick={this.searchTravel}>
+              Search
+            </button>
           </div>
-          <button disabled={type ? false : true} onClick={this.searchTravel}>
-            Search
-          </button>
         </div>
         {error ? (
           <div style={{ color: "red" }}>
@@ -76,6 +93,7 @@ class TravelSearch extends Component {
 
 const mapStateToProps = state => ({
   type: state.travel.type,
+  socket: state.travel.socket,
   requerimentsSelecteds: state.travel.requerimentsSelecteds,
   loading: state.travel.loading,
   shareTravel: state.travel.shareTravel,
@@ -89,7 +107,8 @@ const mapDispatchToProps = dispatch => ({
     type,
     shareTravel,
     elemSelectedId,
-    push
+    push,
+    socket
   ) =>
     dispatch(
       actions.searchTravel(
@@ -97,7 +116,8 @@ const mapDispatchToProps = dispatch => ({
         type,
         shareTravel,
         elemSelectedId,
-        push
+        push,
+        socket
       )
     )
 });

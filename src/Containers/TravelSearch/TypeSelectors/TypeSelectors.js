@@ -19,12 +19,12 @@ class TypeSelectors extends Component {
     const { socket } = this.props;
 
     if (socket) {
-      socket.on(constants.SOCKET_REFRESH_USERS, userId => {
+      socket.on(constants.SOCKET_REFRESH_USERS, () => {
         this.props.onFetchUsers();
       });
-      socket.on(constants.SOCKET_REFRESH_VEHICLES, () =>
-        this.props.onFetchVehicles()
-      );
+      socket.on(constants.SOCKET_REFRESH_VEHICLES, () => {
+        this.props.onFetchVehicles();
+      });
     }
   };
 
