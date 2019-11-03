@@ -7,5 +7,8 @@ export {
   removeRequerimentSelected,
   setType,
   setElementSelectedId,
-  sendElementNotUsedAnymore
+  sendElementNotUsedAnymore,
+  addUserToAccept,
+  addAcceptedUser,
+  setAllNotUsed
 } from "./travel";

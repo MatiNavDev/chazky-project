@@ -1,14 +1,9 @@
-import React from 'react';
+import React from "react";
 
 const travelInformation = props => {
-  const { description, time } = props;
+  const { travelInfo } = props;
 
-  return (
-    <div>
-      <div>{description}</div>
-      <div>{'Faltan ' + time + 'para que llegue tu vehiculo !'}</div>
-    </div>
-  );
+  return <div>{travelInfo}</div>;
 };
 
 export default travelInformation;

@@ -14,8 +14,10 @@ class TravelAcceptance extends Component {
       onSendElementNotUsedAnymore
     } = this.props;
 
-    socket.disconnect();
-    onSendElementNotUsedAnymore(elemSelectedId, type);
+    if (socket) {
+      socket.disconnect();
+      onSendElementNotUsedAnymore(elemSelectedId, type);
+    }
   }
 
   render() {

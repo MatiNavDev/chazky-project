@@ -29,6 +29,20 @@ const removeRequeriment = (state, action) => {
   });
 };
 
+const addUserOrUsersToAccept = (state, action) => {
+  const { userOrUsersToAccept } = action;
+  const usersToAccept = Array.isArray(userOrUsersToAccept)
+    ? userOrUsersToAccept
+    : [...state.usersToAccept, userOrUsersToAccept];
+
+  return updateObject(state, { usersToAccept });
+};
+
+const addUserAccepted = (state, action) =>
+  updateObject(state, {
+    usersAccepted: [...state.usersAccepted, action.userAccepted]
+  });
+
 const travelReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SAVE_TRAVEL_STARTS:
@@ -48,7 +62,11 @@ const travelReducer = (state = initialState, action) => {
     case actionTypes.ELEMENT_NOT_USED_ANYMORE:
       return updateObject(state, initialState);
     case actionTypes.ADD_USER_TO_ACCEPT:
-      return updateObject(state, { usersToAccept: action.usersToAccept });
+      return addUserOrUsersToAccept(state, action);
+    case actionTypes.ADD_USER_ACCEPTED:
+      return addUserAccepted(state, action);
+    case actionTypes.CLEAN_ALL:
+      return updateObject(state, initialState);
     default:
       return state;
   }

@@ -47,9 +47,13 @@ const saveTravelError = message => ({
   type: actionTypes.SAVE_TRAVEL_FAIL,
   message
 });
-const saveUserToAccept = usersToAccept => ({
+const saveUserToAccept = userOrUsersToAccept => ({
   type: actionTypes.ADD_USER_TO_ACCEPT,
-  usersToAccept
+  userOrUsersToAccept
+});
+const addUserAccepted = userAccepted => ({
+  type: actionTypes.ADD_USER_ACCEPTED,
+  userAccepted
 });
 
 /**
@@ -113,11 +117,45 @@ const sendElementNotUsedAnymore = (elementId, type) => dispatch => {
   }
 };
 
+/**
+ * Envia al server el usuario aceptado y lo agrega a la lista
+ * @param {*} user
+ */
+const addAcceptedUser = (user, vehicleId) => async dispatch => {
+  try {
+    await axiosVehicles.post("/acceptUser", {
+      vehicleId,
+      userId: user._id,
+      userSocketId: user.socketId
+    });
+    dispatch(addUserAccepted(user));
+  } catch (error) {
+    //TODO: ideal manejar error, el cual indicaria error del sistema (bug). Para simplificat se hace un console.log
+    console.log(error);
+  }
+};
+
+/**
+ * Limpia todos los usuarios para que no esten conectados
+ */
+const setAllNotUsed = history => async dispatch => {
+  await Promise.all([
+    axiosVehicles.post("/cleanAll"),
+    axiosUsers.post("/cleanAll")
+  ]);
+  dispatch({ type: actionTypes.CLEAN_ALL });
+  history.push("/");
+  window.location.reload(false);
+};
+
 export {
   searchTravel,
   addRequerimentSelected,
   removeRequerimentSelected,
   setType,
   setElementSelectedId,
-  sendElementNotUsedAnymore
+  sendElementNotUsedAnymore,
+  saveUserToAccept as addUserToAccept,
+  addAcceptedUser,
+  setAllNotUsed
 };

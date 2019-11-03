@@ -5,6 +5,7 @@ import SearchingTravel from "../../../Components/TravelAcceptance/SearchingTrave
 import UsersAccepted from "../../../Components/TravelAcceptance/UsersAccepted/UsersAccepted";
 import UsersToAccept from "../../../Components/TravelAcceptance/UsersToAccept/UsersToAccept";
 import * as constants from "../../../shared/constants";
+import * as actions from "../../../store/actions";
 
 class Vehicle extends Component {
   componentDidMount() {
@@ -23,12 +24,10 @@ class Vehicle extends Component {
     });
   };
 
-  aceptUser = userInfo => {
-    this.setState(prevState => ({
-      usersAccepted: [...prevState.usersAccepted, userInfo]
-    }));
+  acceptUser = user => {
+    const { onAddAcceptedUser, elemSelectedId } = this.props;
 
-    this.rejectUser(userInfo);
+    onAddAcceptedUser(user, elemSelectedId);
   };
 
   rejectUser = userInfo => {
@@ -42,20 +41,31 @@ class Vehicle extends Component {
   render() {
     const { usersToAccept, usersAccepted } = this.props;
 
-    const hasUsers = usersToAccept.length > 0 || usersAccepted.length > 0;
+    const hasUsersToAccept = usersToAccept.length > 0;
+    const hasUsersAccepted = usersAccepted.length > 0;
 
-    const componentsToShow = hasUsers ? (
-      <div>
-        <UsersAccepted usersAccepted={usersAccepted} />
-        <UsersToAccept
-          usersToAccept={usersToAccept}
-          aceptUser={this.aceptUser}
-          rejectUser={this.rejectUser}
-        />
-      </div>
-    ) : (
-      <SearchingTravel />
-    );
+    const usersToAcceptComponent = hasUsersToAccept ? (
+      <UsersToAccept
+        usersToAccept={usersToAccept}
+        acceptUser={this.acceptUser}
+        rejectUser={this.rejectUser}
+      />
+    ) : null;
+
+    const usersAcceptedComponent = hasUsersAccepted ? (
+      <UsersAccepted usersAccepted={usersAccepted} />
+    ) : null;
+
+    const componentsToShow =
+      hasUsersAccepted || hasUsersToAccept ? (
+        <div>
+          {usersToAcceptComponent}
+          {usersAcceptedComponent}
+        </div>
+      ) : (
+        <SearchingTravel />
+      );
+
     return componentsToShow;
   }
 }
@@ -63,10 +73,15 @@ class Vehicle extends Component {
 const mapStateToProps = state => ({
   socket: state.travel.socket,
   usersToAccept: state.travel.usersToAccept,
-  usersAccepted: state.travel.usersAccepted
+  usersAccepted: state.travel.usersAccepted,
+  elemSelectedId: state.travel.elemSelectedId
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  onAddUserToAccept: user => dispatch(actions.addUserToAccept(user)),
+  onAddAcceptedUser: (user, vehicleId) =>
+    dispatch(actions.addAcceptedUser(user, vehicleId))
+});
 
 export default connect(
   mapStateToProps,

@@ -7,6 +7,8 @@ import TravelInformation from "../../../Components/TravelAcceptance/TravelInform
 import * as constants from "../../../shared/constants";
 
 class User extends Component {
+  state = { travelInfo: "" };
+
   componentDidMount() {
     const { socket } = this.props;
 
@@ -28,19 +30,16 @@ class User extends Component {
   listenForAcceptance = () => {
     const { socket } = this.props;
 
-    socket.on(constants.SOCKET_USER_LISTENING_FOR_TRAVEL, () =>
-      console.log("yeahh")
-    );
+    socket.on(constants.SOCKET_USER_LISTENING_FOR_TRAVEL, travelInfo => {
+      this.setState({ travelInfo });
+    });
   };
 
   render() {
-    const { travelInfo } = this.props;
+    const { travelInfo } = this.state;
 
     const componentToShow = travelInfo ? (
-      <TravelInformation
-        description={travelInfo.description}
-        time={travelInfo.time}
-      />
+      <TravelInformation travelInfo={travelInfo} />
     ) : (
       <SearchingTravel />
     );
