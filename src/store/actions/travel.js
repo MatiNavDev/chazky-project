@@ -51,6 +51,11 @@ const saveUserToAccept = userOrUsersToAccept => ({
   type: actionTypes.ADD_USER_TO_ACCEPT,
   userOrUsersToAccept
 });
+
+const removeUserToAccept = userId => ({
+  type: actionTypes.REMOVE_USER_TO_ACCEPT,
+  userId
+});
 const addUserAccepted = userAccepted => ({
   type: actionTypes.ADD_USER_ACCEPTED,
   userAccepted
@@ -129,6 +134,7 @@ const addAcceptedUser = (user, vehicleId) => async dispatch => {
       userSocketId: user.socketId
     });
     dispatch(addUserAccepted(user));
+    dispatch(removeUserToAccept(user._id));
   } catch (error) {
     //TODO: ideal manejar error, el cual indicaria error del sistema (bug). Para simplificat se hace un console.log
     console.log(error);

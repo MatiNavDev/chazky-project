@@ -43,6 +43,11 @@ const addUserAccepted = (state, action) =>
     usersAccepted: [...state.usersAccepted, action.userAccepted]
   });
 
+const removeUserToAccept = (state, action) =>
+  updateObject(state, {
+    usersToAccept: state.usersToAccept.filter(u => u._id !== action.userId)
+  });
+
 const travelReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SAVE_TRAVEL_STARTS:
@@ -67,6 +72,8 @@ const travelReducer = (state = initialState, action) => {
       return addUserAccepted(state, action);
     case actionTypes.CLEAN_ALL:
       return updateObject(state, initialState);
+    case actionTypes.REMOVE_USER_TO_ACCEPT:
+      return removeUserToAccept(state, action);
     default:
       return state;
   }
