@@ -1,0 +1,33 @@
+Diseno - Planteos
+
+SPA
+    Se decidio utilizar SPA debido a la facilidad en la navegacion que le daria al usuario y la fluidez.
+Lazy Loading
+    Se busco cargar los containers a traves de Lazy Loading lo que permite aliviar la carga inicial en el browser
+    y cargar los demas archivos cuando sean demandados
+Containers y Components
+    Se busco dividir en dos categorias los distintos componentes, de acuerdo al uso de los ciclos de vida y del state o reducer
+    utilizando "Containers", o de acuerdo a "Componentes" los cuales son mas simples (sin demasiado logica) y no utilizan
+    lo nombrado anteriormente
+
+--------------------
+
+Redux
+
+Pudiendo elegir si Context o Redux, se opto por redux creando distintos reducers para alojar datos. Esta opcion fue elegida debido
+a la facilidad de debuggear (flujos no tan simples en la cual utilizar reduxDevTools fue de gran ayuda), debido a la facilidad de 
+combinar reducers y lo legible que queda el codigo (no asi si fuera con distintos context) y tambien utilizando action creators 
+(thunk) que permitieron dejar mas limpio los componentes y que el codigo asincrono sea realizado por los reducers.
+
+Problemas con Redux (Diseno)
+Demasiado grande el reducer de travel. Solucion seria poder planificar como resolverlo en diferentes partes.
+El pair programming hubiese ayudado a poder otorgar camino alternativo y detectar este problema mas tempranamente ademas de
+mejorar planificacion de los stores (como van a estar divididos)
+
+-----------------
+
+Test (no solo codigo, sino flujos y "good enough")
+
+Definir casos de pruebas. Definir cuando se cumple la condicion de "good enough". 
+Solucion: junto a un grupo o utilizando la tecnica de pair programming consensuar que conjunto de casos cumplen
+con la condicion de "good enough" para poder finalizar los testeos de la aplicacion de manera convincente para los involucrados. 

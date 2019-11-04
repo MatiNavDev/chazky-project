@@ -1,68 +1,35 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Chasky-Project-Frontend (MERN)
 
-## Available Scripts
+Este proyecto busca poder simular que distintos usuarios quieran viajar y que otros vehiculos quieran
+aceptar viajes. El mismo fue realizado utilizando la libreria React junto con Redux para la comparticion de datos y
+utilizando una API Rest junto con sockets.
 
-In the project directory, you can run:
+### Objetivo
 
-### `npm start`
+La idea de esta aplicacion es poder ir eligiendo usuarios y vehiculos e ir combinando los distintos requerimientos y si el vehiculo acepta testear si puede aceptar otros usuarios.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Casos de prueba planteados
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Se busco simular que varios usuarios puedan requerir viajar, y que varios vehiculos puedan requerir adquirir clientes.
+Cuando un usuario busca viajar, el flujo seria:
+-   Selecciona usuario => se le activan los requerimientos
+-   Selecciona que requerimientos quiere que tenga el vehiculo
+-   Selecciona si desea compartir Vehiculo
+-   Busca Vehiculo.
+-   Cancelar Viaje ya aceptado por vehiculo, lo que hace que el mismo usuario sea cancelado y al vehiculo que lo escogio se le remueva este usuario de la lista de usuarios aceptados
 
-### `npm test`
+Con esto, el usuario se queda "esperando" por nuevos vehiculos que puedan aparecer y puedan aceptar viaje. Por lo cual
+el flujo respecto a un vehiculo seria:
+-   Selecciona vehiculo => solo le aparece buscar, sin ningun requerimiento posible ya que los mismos se encuentrar ya cargados
+    con los vehiculos:
+    -   Todo terreno: tiene todos los requerimientos
+    -   Moderno y rapido: tiene dichos requerimientos
+    -   Modesto: no tiene ningun requerimientos
+-   Cuando apreta buscar, se le traen todos los usuarios que pueden viajar con el (ya que cumple los requerimientos) y luego se queda esperano por otros usuarios que puedan aparecer.
+-   Los usuarios los puede aceptar o rechazar
+    -   Rechazar: lo agrega a lista de no permitidos y mientras el vehiculo se encuentre elegido (es decir, hasta que no finalize) si ese usuario cancelase y volviera a querer buscar vehiculo, este no seria una opcion.
+    -   Aceptar: lo agrega a la lista de usuarios Aceptados (que estan viajando con el). Si el usuario comparte viaje, entonces puede aceptar otro usuario que quiera viajar, caso contrario no.
+-   Finalizar Viajes: finaliza al vehiculo, y por lo tanto finaliza los viajes de los usuarios que se encuentran conectados
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+A modo de simplificacion y "volver a empezar desde cero" se agrego el boton "limpiar conexiones" en el header de la app que limpia todos los vehiculos y usuarios conectados. (Mas que nada para evitar tener que finalizar los viajes en cada una de las pestanas)
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
