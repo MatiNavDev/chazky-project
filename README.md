@@ -33,3 +33,13 @@ el flujo respecto a un vehiculo seria:
 
 A modo de simplificacion y "volver a empezar desde cero" se agrego el boton "limpiar conexiones" en el header de la app que limpia todos los vehiculos y usuarios conectados. (Mas que nada para evitar tener que finalizar los viajes en cada una de las pestanas)
 
+--- 
+### Eliminar Seleccion
+
+Para eliminar usuario o vehiculo seleccionado (sin haber apretado boton buscar), seleccionar el espacio en blanco 
+
+### Cancelar Usuario o Vehiculo elegido
+
+Con volver hacia atras (home) se cancela el elemento seleccionado
+
+

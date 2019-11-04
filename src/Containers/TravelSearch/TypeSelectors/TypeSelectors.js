@@ -28,6 +28,9 @@ class TypeSelectors extends Component {
     }
   };
 
+  /**
+   * Maneja el seleccionar una opcion
+   */
   onChooseOption = (event, type) => {
     const { onSetType, onSetElementSelected } = this.props;
 

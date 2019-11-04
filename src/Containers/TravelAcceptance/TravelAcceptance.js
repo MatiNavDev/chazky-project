@@ -40,6 +40,9 @@ class TravelAcceptance extends Component {
     socket.disconnect();
   };
 
+  /**
+   * Finaliza la conexion del elemento elegido
+   */
   endTravel = () => {
     const { history } = this.props;
     history.push("/");

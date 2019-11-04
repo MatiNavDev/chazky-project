@@ -14,10 +14,16 @@ class TravelSearch extends Component {
     shareTravel: false
   };
 
+  /**
+   * Maneja el cambio en el checkbok shareTavel
+   */
   onChangeSearchTravel = () => {
     this.setState(prevState => ({ shareTravel: !prevState.shareTravel }));
   };
 
+  /**
+   * Ejecuta el reducer de buscar viaje
+   */
   searchTravel = () => {
     const { shareTravel } = this.state;
     const {
