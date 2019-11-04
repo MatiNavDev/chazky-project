@@ -53,12 +53,12 @@ class TypeSelectors extends Component {
       name: ""
     };
 
+    if (error || !users || !vehicles) return <ErrorComponent />;
+
     users = [falseElement, ...users];
     vehicles = [falseElement, ...vehicles];
 
     if (loading) return <LoadingComponent additionalText="Selectores" />;
-
-    if (error) return <ErrorComponent />;
 
     const usersSelectorComponent = (
       <TypeSelector
