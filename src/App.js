@@ -8,7 +8,7 @@ import * as actions from "./store/actions";
 import "./App.css";
 
 const TravelSearch = React.lazy(() =>
-  import("./Containers/TravelSearch/TravelSearch.Js")
+  import("./Containers/TravelSearch/TravelSearch.js")
 );
 const TravelAcceptance = React.lazy(() =>
   import("./Containers/TravelAcceptance/TravelAcceptance")
