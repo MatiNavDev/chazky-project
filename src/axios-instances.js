@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:3007/chasky-project-api/v1/";
+const baseUrl =
+  "https://chasky-app-server.herokuapp.com/chasky-project-api/v1/";
 
 const axiosUsers = axios.create({
   baseURL: baseUrl + "users/"

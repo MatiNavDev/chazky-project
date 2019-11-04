@@ -67,7 +67,7 @@ const removeUserAccepted = userAcceptedId => ({
 });
 
 const socketInit = () => dispatch => {
-  const socket = socketIOClient("http://127.0.0.1:3007");
+  const socket = socketIOClient("https://chasky-app-server.herokuapp.com");
 
   socket.on("connect", () => console.log("client connected"));
 
