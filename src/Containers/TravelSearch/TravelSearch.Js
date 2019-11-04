@@ -25,8 +25,8 @@ class TravelSearch extends Component {
       requerimentsSelecteds,
       onSearchTravel,
       elemSelectedId,
-      type,
-      socket
+      socket,
+      type
     } = this.props;
 
     onSearchTravel(
