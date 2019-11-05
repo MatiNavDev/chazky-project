@@ -36,15 +36,14 @@ class User extends Component {
 
   render() {
     const { travelInfo } = this.state;
-    const { endTravel } = this.props;
-
+    const { endTravel, user } = this.props;
     const componentToShow = travelInfo ? (
       <div>
         <TravelInformation travelInfo={travelInfo} />
         <button onClick={endTravel}>Finalizar Viaje</button>
       </div>
     ) : (
-      <SearchingTravel />
+      <SearchingTravel elem={user} />
     );
     return componentToShow;
   }
@@ -52,7 +51,8 @@ class User extends Component {
 
 const mapStateToProps = state => ({
   socket: state.travel.socket,
-  travelInfo: state.travel.travelInfo
+  travelInfo: state.travel.travelInfo,
+  user: state.travel.element
 });
 
 export default withRouter(connect(mapStateToProps)(User));

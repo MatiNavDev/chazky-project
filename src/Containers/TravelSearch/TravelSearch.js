@@ -11,7 +11,21 @@ import * as constants from "../../shared/constants";
 
 class TravelSearch extends Component {
   state = {
-    shareTravel: false
+    shareTravel: false,
+    location: {
+      latitude: {
+        value: 0,
+        label: "Latitud"
+      },
+      longitude: {
+        value: 0,
+        label: "Longitud"
+      },
+      maxDistance: {
+        value: 0,
+        label: "Max. Distancia"
+      }
+    }
   };
 
   /**
@@ -22,10 +36,26 @@ class TravelSearch extends Component {
   };
 
   /**
+   * Maneja el cambio de valor en los input de location
+   */
+  locationInputChangeHandler = (event, key) => {
+    const locationKeyObj = { ...this.state.location[key] };
+    locationKeyObj.value = +event.target.value;
+
+    const updatedlocationKey = {
+      [key]: locationKeyObj
+    };
+
+    this.setState(prevState => ({
+      location: { ...prevState.location, ...updatedlocationKey }
+    }));
+  };
+
+  /**
    * Ejecuta el reducer de buscar viaje
    */
   searchTravel = () => {
-    const { shareTravel } = this.state;
+    const { shareTravel, location } = this.state;
     const {
       history,
       requerimentsSelecteds,
@@ -34,27 +64,30 @@ class TravelSearch extends Component {
       socket,
       type
     } = this.props;
-
     onSearchTravel(
       requerimentsSelecteds,
       type,
       shareTravel,
       elemSelectedId,
       history.push,
-      socket
+      socket,
+      location.latitude.value,
+      location.longitude.value,
+      location.maxDistance.value
     );
   };
 
   render() {
-    const { shareTravel } = this.state;
+    const { shareTravel, location } = this.state;
     const { loading, type, error } = this.props;
 
     if (loading) return <LoadingComponent additonalText="Viaje" />;
 
-    const inputId = "shareVehicle";
+    const shareVehicleinputId = "shareVehicle";
 
     let requerimentsSelectorComponent = null,
-      shareTravelElem = null;
+      shareTravelElem = null,
+      locationInputsElem = null;
 
     if (type === constants.USER) {
       requerimentsSelectorComponent = <RequerimentsSelector />;
@@ -65,11 +98,36 @@ class TravelSearch extends Component {
             defaultChecked={shareTravel}
             onChange={this.onChangeSearchTravel}
             type="checkbox"
-            id={inputId}
+            id={shareVehicleinputId}
           />
-          <label htmlFor={inputId}>
+          <label htmlFor={shareVehicleinputId}>
             <span className="fa fa-check" /> Deseas Compartir Viaje ?
           </label>
+        </div>
+      );
+
+      locationInputsElem = (
+        <div>
+          {Object.keys(location).map(key => {
+            const locationObj = location[key];
+            return (
+              <div key={key}>
+                <label htmlFor={key}>
+                  <span className="fa fa-check" />{" "}
+                  {"Ingrese " + locationObj.label}
+                </label>
+                <input
+                  style={{ margin: "2px 5px" }}
+                  onChange={event =>
+                    this.locationInputChangeHandler(event, key)
+                  }
+                  type="number"
+                  id={key}
+                  value={locationObj.value}
+                />
+              </div>
+            );
+          })}
         </div>
       );
     }
@@ -80,8 +138,8 @@ class TravelSearch extends Component {
           <TypeSelectors />
           {requerimentsSelectorComponent}
           {shareTravelElem}
-
-          <div>
+          {locationInputsElem}
+          <div style={{ margin: "5px 0" }}>
             <button disabled={type ? false : true} onClick={this.searchTravel}>
               Search
             </button>
@@ -114,7 +172,10 @@ const mapDispatchToProps = dispatch => ({
     shareTravel,
     elemSelectedId,
     push,
-    socket
+    socket,
+    latitude,
+    longitude,
+    maxDistance
   ) =>
     dispatch(
       actions.searchTravel(
@@ -123,7 +184,10 @@ const mapDispatchToProps = dispatch => ({
         shareTravel,
         elemSelectedId,
         push,
-        socket
+        socket,
+        latitude,
+        longitude,
+        maxDistance
       )
     )
 });

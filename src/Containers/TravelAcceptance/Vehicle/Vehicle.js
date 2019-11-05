@@ -47,8 +47,7 @@ class Vehicle extends Component {
   };
 
   render() {
-    const { usersToAccept, usersAccepted, endTravel } = this.props;
-
+    const { usersToAccept, usersAccepted, endTravel, vehicle } = this.props;
     const hasUsersToAccept = usersToAccept.length > 0;
     const hasUsersAccepted = usersAccepted.length > 0;
 
@@ -72,7 +71,7 @@ class Vehicle extends Component {
           <button onClick={endTravel}>Finalizar Viajes</button>
         </div>
       ) : (
-        <SearchingTravel />
+        <SearchingTravel elem={vehicle} />
       );
 
     return componentsToShow;
@@ -83,7 +82,8 @@ const mapStateToProps = state => ({
   socket: state.travel.socket,
   usersToAccept: state.travel.usersToAccept,
   usersAccepted: state.travel.usersAccepted,
-  elemSelectedId: state.travel.elemSelectedId
+  elemSelectedId: state.travel.elemSelectedId,
+  vehicle: state.travel.element
 });
 
 const mapDispatchToProps = dispatch => ({

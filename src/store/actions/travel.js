@@ -39,9 +39,10 @@ const elementNotUsedAnymore = () => ({
 const saveTravelStart = () => ({
   type: actionTypes.SAVE_TRAVEL_STARTS
 });
-const saveTravelSuccess = socket => ({
+const saveTravelSuccess = (socket, element) => ({
   type: actionTypes.SAVE_TRAVEL_SUCCESS,
-  socket
+  socket,
+  element
 });
 const saveTravelError = message => ({
   type: actionTypes.SAVE_TRAVEL_FAIL,
@@ -67,7 +68,7 @@ const removeUserAccepted = userAcceptedId => ({
 });
 
 const socketInit = () => dispatch => {
-  const socket = socketIOClient("https://chasky-app-server.herokuapp.com");
+  const socket = socketIOClient("http://localhost:3007");
 
   socket.on("connect", () => console.log("client connected"));
 
@@ -90,8 +91,11 @@ const searchTravel = (
   type,
   shareTravel,
   elemSelectedId,
-  push,
-  socket
+  historyPush,
+  socket,
+  latitude,
+  longitude,
+  maxDistance
 ) => async dispatch => {
   try {
     dispatch(saveTravelStart());
@@ -102,14 +106,17 @@ const searchTravel = (
         requerimentsSelecteds,
         shareTravel,
         [type]: elemSelectedId,
-        socketId: socket.id
+        socketId: socket.id,
+        latitude,
+        longitude,
+        maxDistance
       };
       const resp = await axiosInstance.post("/", body);
-      dispatch(saveTravelSuccess(socket));
+      dispatch(saveTravelSuccess(socket, resp.data.data.element));
       if (type === constants.VEHICLE)
         dispatch(saveUserToAccept(resp.data.data.usersToAccept));
 
-      push("/travelAcceptance");
+      historyPush("/travelAcceptance");
     } catch (error) {
       dispatch(saveTravelError(error));
     }

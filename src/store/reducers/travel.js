@@ -9,8 +9,16 @@ const initialState = {
   usersAccepted: [],
   loading: false,
   elemSelectedId: "",
+  element: "",
   error: ""
 };
+
+const setTravelSuccess = (state, action) =>
+  updateObject(state, {
+    loading: false,
+    socket: action.socket,
+    element: action.element
+  });
 
 const addRequeriment = (state, action) => {
   return updateObject(state, {
@@ -62,7 +70,7 @@ const travelReducer = (state = initialState, action) => {
     case actionTypes.SAVE_TRAVEL_STARTS:
       return updateObject(state, { loading: true });
     case actionTypes.SAVE_TRAVEL_SUCCESS:
-      return updateObject(state, { loading: false, socket: action.socket });
+      return setTravelSuccess(state, action);
     case actionTypes.SAVE_TRAVEL_FAIL:
       return updateObject(state, { loading: false, error: action.message });
     case actionTypes.ADD_REQUERIMENT:
