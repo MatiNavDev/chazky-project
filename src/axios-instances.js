@@ -1,9 +1,7 @@
 import axios from "axios";
 
 const baseUrl =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:3007/chasky-project-api/v1/"
-    : "https://chasky-app-server.herokuapp.com/chasky-project-api/v1/";
+  "https://chasky-app-server.herokuapp.com/chasky-project-api/v1/";
 
 const axiosUsers = axios.create({
   baseURL: baseUrl + "users/"
