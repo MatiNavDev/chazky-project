@@ -28,9 +28,11 @@ class Vehicle extends Component {
   listenForUserCancelledTravel = () => {
     const { socket, onRemoveUserAccepted, onRemoveUserToAccept } = this.props;
 
-    socket.on(constants.SOCKET_VEHICLE_REMOVE_TRAVELLING_USER, userId => {
-      onRemoveUserAccepted(userId);
-      onRemoveUserToAccept(userId);
+    socket.on(constants.SOCKET_VEHICLE_REMOVE_TRAVELLING_USER, params => {
+      const { id } = params;
+      onRemoveUserAccepted(id);
+
+      if (params.onlyToAccept) onRemoveUserToAccept(id);
     });
   };
 

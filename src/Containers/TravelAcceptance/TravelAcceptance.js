@@ -22,7 +22,6 @@ class TravelAcceptance extends Component {
     } = this.props;
 
     if (socket) {
-      debugger;
       onSendElementNotUsedAnymore(elemSelectedId, type, socket);
       onSocketInit();
     }
