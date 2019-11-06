@@ -13,10 +13,11 @@ La idea de esta aplicacion es poder ir eligiendo usuarios y vehiculos e ir combi
 Se busco simular que varios usuarios puedan requerir viajar, y que varios vehiculos puedan requerir adquirir clientes.
 Cuando un usuario busca viajar, el flujo seria:
 -   Selecciona usuario => se le activan los requerimientos
--   Selecciona que requerimientos quiere que tenga el vehiculo
--   Selecciona si desea compartir Vehiculo
+-   Selecciona que requerimientos quiere que tenga el vehiculo. Selecciona latitud y longitud de la ubicacion, y la maxima          distancia (en Km.) que tendra la busqueda (si se quiere buscar latitudes que difieran poner numeros altos ej: 1000000).
+-   Selecciona si desea compartir Vehiculo.
 -   Busca Vehiculo.
 -   Cancelar Viaje ya aceptado por vehiculo, lo que hace que el mismo usuario sea cancelado y al vehiculo que lo escogio se le remueva este usuario de la lista de usuarios aceptados
+-   
 
 Con esto, el usuario se queda "esperando" por nuevos vehiculos que puedan aparecer y puedan aceptar viaje. Por lo cual
 el flujo respecto a un vehiculo seria:
@@ -25,6 +26,7 @@ el flujo respecto a un vehiculo seria:
     -   Todo terreno: tiene todos los requerimientos
     -   Moderno y rapido: tiene dichos requerimientos
     -   Modesto: no tiene ningun requerimientos
+    -   ubicacion: todos los vehiculos tienen una ubicacion seteada, la cual se muestra en el selector.
 -   Cuando apreta buscar, se le traen todos los usuarios que pueden viajar con el (ya que cumple los requerimientos) y luego se queda esperano por otros usuarios que puedan aparecer.
 -   Los usuarios los puede aceptar o rechazar
     -   Rechazar: lo agrega a lista de no permitidos y mientras el vehiculo se encuentre elegido (es decir, hasta que no finalize) si ese usuario cancelase y volviera a querer buscar vehiculo, este no seria una opcion.
