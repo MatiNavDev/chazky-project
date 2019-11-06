@@ -8,7 +8,7 @@ export const updateObject = (oldObj, updatedProp) => {
 };
 
 export const initSocket = () => {
-  const socket = socketIOClient("http://localhost:3007");
+  const socket = socketIOClient("https://chasky-app-server.herokuapp.com");
   socket.on("connect", () => console.log("client connected"));
   return socket;
 };
