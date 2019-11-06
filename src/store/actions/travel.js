@@ -1,8 +1,7 @@
-import socketIOClient from "socket.io-client";
-
 import * as actionTypes from "./actionTypes";
 import * as constants from "../../shared/constants";
 import { axiosUsers, axiosVehicles } from "../../axios-instances";
+import { initSocket } from "../../shared/utility";
 
 /**
  * Anade el requerimiento a la lista de requerimientos Seleccionados
@@ -68,9 +67,7 @@ const removeUserAccepted = userAcceptedId => ({
 });
 
 const socketInit = () => dispatch => {
-  const socket = socketIOClient("http://localhost:3007");
-
-  socket.on("connect", () => console.log("client connected"));
+  const socket = initSocket();
 
   dispatch({
     type: actionTypes.INIT_SOCKET,
@@ -122,6 +119,7 @@ const searchTravel = (
     }
   } catch (error) {
     dispatch(saveTravelError(error));
+    console.log(error);
   }
 };
 
@@ -140,6 +138,11 @@ const sendElementNotUsedAnymore = (
     await axiosInstance.post("/notUsedAnymore", { id: elementId });
     dispatch(elementNotUsedAnymore());
     socket.disconnect();
+
+    dispatch({
+      type: actionTypes.INIT_SOCKET,
+      socket: initSocket()
+    });
   } catch (error) {
     //TODO IDEAL: como se ejecuta con el componentWillUnmount lo ideal seria que en el caso
     // de error se planifique una estrategia para ver como volver a enviar este evento al servidor para
@@ -163,7 +166,7 @@ const addAcceptedUser = (user, vehicleId) => async dispatch => {
     dispatch(addUserAccepted(user));
 
     if (resp.data.data.shareVehicle) {
-      //si puede compartir vehiculo remueve solo el usuario
+      //si puede compartir vehiculo remueve solo el usuario y los que no pueden compartir vehiculo
       dispatch(removeUserToAccept(user._id));
     } else {
       //si no puede compartir vehiculo remueve todos los usuarios
@@ -195,13 +198,12 @@ const rejectUserToAccept = (user, vehicleId) => async dispatch => {
  * Limpia todos los usuarios para que no esten conectados
  */
 const setAllNotUsed = history => async dispatch => {
+  dispatch({ type: actionTypes.CLEAN_SOCKET });
   await Promise.all([
     axiosVehicles.post("/cleanAll"),
     axiosUsers.post("/cleanAll")
   ]);
-  dispatch({ type: actionTypes.CLEAN_ALL });
   history.push("/");
-  window.location.reload(false);
 };
 
 export {

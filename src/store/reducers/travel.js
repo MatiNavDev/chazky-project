@@ -53,7 +53,9 @@ const addUserAccepted = (state, action) =>
 
 const removeUserToAccept = (state, action) =>
   updateObject(state, {
-    usersToAccept: state.usersToAccept.filter(u => u._id !== action.userId)
+    usersToAccept: state.usersToAccept.filter(
+      u => u._id !== action.userId && u.shareVehicle
+    )
   });
 
 const removeUserAccepted = (state, action) =>
@@ -87,8 +89,8 @@ const travelReducer = (state = initialState, action) => {
       return addUserOrUsersToAccept(state, action);
     case actionTypes.ADD_USER_ACCEPTED:
       return addUserAccepted(state, action);
-    case actionTypes.CLEAN_ALL:
-      return updateObject(state, initialState);
+    case actionTypes.CLEAN_SOCKET:
+      return updateObject(state, { socket: null });
     case actionTypes.REMOVE_USER_TO_ACCEPT:
       return removeUserToAccept(state, action);
     case actionTypes.REMOVE_USER_ACCEPTED:

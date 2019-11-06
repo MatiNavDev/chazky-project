@@ -1,7 +1,7 @@
 import React from "react";
 
 const errorComponent = () => (
-  <div>Ups, algo salio mal. Por favor, intentalo de nuevo mas tarde !!</div>
+  <div>Ups, algo salio mal. Por favor, recarga la pagina !!</div>
 );
 
 export default errorComponent;

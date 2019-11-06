@@ -17,11 +17,14 @@ class TravelAcceptance extends Component {
       socket,
       type,
       elemSelectedId,
-      onSendElementNotUsedAnymore
+      onSendElementNotUsedAnymore,
+      onSocketInit
     } = this.props;
 
     if (socket) {
+      debugger;
       onSendElementNotUsedAnymore(elemSelectedId, type, socket);
+      onSocketInit();
     }
   }
 
@@ -34,10 +37,11 @@ class TravelAcceptance extends Component {
   };
 
   finishConnection = () => {
-    const { socket, history } = this.props;
+    const { socket, history, onSocketInit } = this.props;
 
     history.push("/");
     socket.disconnect();
+    onSocketInit();
   };
 
   /**
@@ -73,7 +77,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onSendElementNotUsedAnymore: (elem, type, socket) =>
-    dispatch(actions.sendElementNotUsedAnymore(elem, type, socket))
+    dispatch(actions.sendElementNotUsedAnymore(elem, type, socket)),
+  onSocketInit: () => dispatch(actions.socketInit())
 });
 
 export default withRouter(

@@ -6,8 +6,9 @@ import * as actions from "../../store/actions";
 
 class Layout extends Component {
   cleanAll = () => {
-    const { onSetNotUsed, history } = this.props;
+    const { onSetNotUsed, history, onSocketInit } = this.props;
     onSetNotUsed(history);
+    onSocketInit();
   };
 
   render() {
@@ -26,7 +27,8 @@ class Layout extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  onSetNotUsed: history => dispatch(actions.setAllNotUsed(history))
+  onSetNotUsed: history => dispatch(actions.setAllNotUsed(history)),
+  onSocketInit: () => dispatch(actions.socketInit())
 });
 
 export default withRouter(
